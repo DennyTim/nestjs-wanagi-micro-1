@@ -1,3 +1,4 @@
+import { Expose } from "class-transformer";
 import {
   Column,
   Entity,
@@ -10,11 +11,14 @@ export class User {
   public id?: number;
 
   @Column({ unique: true })
+  @Expose()
   public email: string;
 
   @Column()
+  @Expose()
   public name: string;
 
   @Column()
+  @Expose()
   public password: string;
 }

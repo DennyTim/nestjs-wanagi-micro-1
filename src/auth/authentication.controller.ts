@@ -6,6 +6,7 @@ import {
   Post,
   Req,
   Res,
+  SerializeOptions,
   UseGuards
 } from "@nestjs/common";
 import { Response } from "express";
@@ -16,6 +17,9 @@ import { LocalAuthenticationGuard } from "./guards/localAuthentication.guard";
 import { RequestWithUser } from "./models/requestWithUser.interface";
 
 @Controller("auth")
+@SerializeOptions({
+  strategy: "excludeAll"
+})
 export class AuthenticationController {
   constructor(
     private readonly authenticationService: AuthenticationService
