@@ -6,9 +6,12 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import PostEntity from "src/posts/entities/post.entity";
 import { Repository } from "typeorm";
+import { Category } from "../../categories/category.entity";
+import { UpdateCategoryDto } from "../../categories/dto/update-category.dto";
 import { User } from "../../users/user.entity";
 import { CreatePostDto } from "../dto/createPost.dto";
 import { UpdatePostDto } from "../dto/updatePost.dto";
+import { CategoryNotFoundException } from "../exceptions/category-not-found.exception";
 import { PostNotFoundException } from "../exceptions/post-not-found.exception";
 
 @Injectable()

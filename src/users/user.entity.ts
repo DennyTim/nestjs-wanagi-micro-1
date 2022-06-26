@@ -1,4 +1,4 @@
-import { Expose } from "class-transformer";
+import { Exclude } from "class-transformer";
 import {
   Column,
   Entity,
@@ -16,14 +16,13 @@ export class User {
   public id?: number;
 
   @Column({ unique: true })
-  @Expose()
   public email: string;
 
   @Column()
-  @Expose()
   public name: string;
 
   @Column()
+  @Exclude()
   public password: string;
 
   /**
@@ -40,7 +39,6 @@ export class User {
     }
   )
   @JoinColumn()
-  @Expose()
   public address: Address;
 
   @OneToMany(() => Post, (post: Post) => post.author)

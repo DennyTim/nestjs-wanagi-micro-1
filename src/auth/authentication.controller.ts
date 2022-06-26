@@ -3,10 +3,10 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  HttpCode,
   Post,
   Req,
   Res,
-  SerializeOptions,
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
@@ -18,9 +18,6 @@ import { LocalAuthenticationGuard } from "./guards/localAuthentication.guard";
 import { RequestWithUser } from "./models/requestWithUser.interface";
 
 @Controller("auth")
-@SerializeOptions({
-  strategy: "excludeAll"
-})
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthenticationController {
   constructor(
@@ -33,15 +30,14 @@ export class AuthenticationController {
     return this.authenticationService.register(registrationData);
   }
 
+  @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post("log-in")
-  async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
+  async logIn(@Req() request: RequestWithUser) {
     const { user } = request;
     const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
-    response.setHeader("Set-Cookie", cookie);
-    response
-      .status(200)
-      .json({ ...user, id: undefined });
+    request.res.setHeader("Set-Cookie", cookie);
+    return user;
   }
 
   @UseGuards(JwtAuthenticationGuard)
