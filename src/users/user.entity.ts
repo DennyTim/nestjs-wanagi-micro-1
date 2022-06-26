@@ -19,6 +19,5 @@ export class User {
   public name: string;
 
   @Column()
-  @Expose()
   public password: string;
 }
