@@ -8,7 +8,7 @@ import PostEntity from "src/posts/entities/post.entity";
 import { Repository } from "typeorm";
 import { Category } from "../../categories/category.entity";
 import { UpdateCategoryDto } from "../../categories/dto/update-category.dto";
-import { User } from "../../users/user.entity";
+import { UserEntity } from "../../users/user.entity";
 import { CreatePostDto } from "../dto/createPost.dto";
 import { UpdatePostDto } from "../dto/updatePost.dto";
 import { CategoryNotFoundException } from "../exceptions/category-not-found.exception";
@@ -43,7 +43,7 @@ export default class PostsService {
     throw new PostNotFoundException(id);
   }
 
-  async createPost(post: CreatePostDto, user: User) {
+  async createPost(post: CreatePostDto, user: UserEntity) {
     const newPost = await this.postsRepository.create({
       ...post,
       author: {

@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 import { Category } from "../../categories/category.entity";
-import { User } from "../../users/user.entity";
+import { UserEntity } from "../../users/user.entity";
 
 @Entity()
 class Post {
@@ -20,8 +20,8 @@ class Post {
   @Column()
   public content: string;
 
-  @ManyToOne(() => User, (author: User) => author.posts)
-  public author: User;
+  @ManyToOne(() => UserEntity, (author: UserEntity) => author.posts)
+  public author: UserEntity;
 
   @ManyToMany(() => Category, (category: Category) => category.posts)
   @JoinTable()

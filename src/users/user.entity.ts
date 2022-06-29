@@ -11,7 +11,7 @@ import Post from "../posts/entities/post.entity";
 import { Address } from "./address.entity";
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   public id?: number;
 
@@ -20,6 +20,9 @@ export class User {
 
   @Column()
   public name: string;
+
+  @Column({ nullable: true })
+  public phoneNumber?: string;
 
   @Column()
   @Exclude()
@@ -42,5 +45,5 @@ export class User {
   public address: Address;
 
   @OneToMany(() => Post, (post: Post) => post.author)
-  public posts: Post[];
+  public posts?: Post[];
 }

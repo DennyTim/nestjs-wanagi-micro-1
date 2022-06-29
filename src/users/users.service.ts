@@ -6,13 +6,13 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dto/createUser.dto";
-import { User } from "./user.entity";
+import { UserEntity } from "./user.entity";
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>
   ) {
   }
 
