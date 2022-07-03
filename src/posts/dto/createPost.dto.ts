@@ -8,8 +8,8 @@ export class CreatePostDto {
   @IsNotEmpty()
   title: string;
 
-  @IsString()
+  @IsString({ each: true })
   @IsNotEmpty()
-  content: string;
+  paragraphs: string[];
 }
 
