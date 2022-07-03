@@ -10,6 +10,7 @@ import { UserEntity } from "../users/user.entity";
 import { UsersModule } from "../users/users.module";
 import { AuthenticationController } from "./authentication.controller";
 import { AuthenticationService } from "./authentication.service";
+import { JwtRefreshTokenStrategy } from "./strategies/jwt-refresh.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { LocalStrategy } from "./strategies/local.strategy";
 
@@ -18,21 +19,13 @@ import { LocalStrategy } from "./strategies/local.strategy";
     UsersModule,
     PassportModule,
     ConfigModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get("JWT_SECRET"),
-        signOptions: {
-          expiresIn: `${configService.get("JWT_EXPIRATION_TIME")}s`
-        }
-      })
-    })
+    JwtModule.register({})
   ],
   providers: [
     AuthenticationService,
     LocalStrategy,
-    JwtStrategy
+    JwtStrategy,
+    JwtRefreshTokenStrategy
   ],
   controllers: [AuthenticationController]
 })

@@ -7,7 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
-import Post from "../posts/entities/post.entity";
+import PostEntity from "../posts/entities/post.entity";
 import { Address } from "./address.entity";
 
 @Entity()
@@ -28,6 +28,12 @@ export class UserEntity {
   @Exclude()
   public password: string;
 
+  @Column({
+    nullable: true
+  })
+  @Exclude()
+  public currentHashedRefreshToken?: string;
+
   /**
    * @eager - If we want our related entities always to be included
    * instead of: ```this.addressRepository.find({ relations: ["user"] });```
@@ -44,6 +50,6 @@ export class UserEntity {
   @JoinColumn()
   public address: Address;
 
-  @OneToMany(() => Post, (post: Post) => post.author)
-  public posts?: Post[];
+  @OneToMany(() => PostEntity, (post: PostEntity) => post.author)
+  public posts?: PostEntity[];
 }

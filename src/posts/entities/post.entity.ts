@@ -10,7 +10,7 @@ import { Category } from "../../categories/category.entity";
 import { UserEntity } from "../../users/user.entity";
 
 @Entity()
-class Post {
+class PostEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -28,4 +28,4 @@ class Post {
   public categories: Category[];
 }
 
-export default Post;
+export default PostEntity;
