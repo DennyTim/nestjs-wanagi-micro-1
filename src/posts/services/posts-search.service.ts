@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
 import PostEntity from "../entities/post.entity";
+import { PostCountResult } from "../types/post-count-result.model";
 import { PostSearchBody } from "../types/post-search-body.model";
 import { PostSearchResult } from "../types/post-search-result.model";
 
@@ -23,20 +24,67 @@ export class PostsSearchService {
     });
   }
 
-  async search(text: string) {
+  async search(
+    text: string,
+    offset?: number,
+    limit?: number,
+    startId = 0
+  ) {
+    let separateCount = 0;
+    if (startId) {
+      separateCount = await this.count(text, ['title', 'paragraphs']);
+    }
     const { body } = await this.elasticSearchService.search<PostSearchResult>({
       index: this.index,
+      from: offset,
+      size: limit,
       body: {
         query: {
-          multi_match: {
-            query: text,
-            fields: ["title", "content"]
+          bool: {
+            should: {
+              multi_match: {
+                query: text,
+                fields: ["title", "paragraphs"]
+              }
+            },
+            filter: {
+              range: {
+                id: {
+                  gt: startId
+                }
+              }
+            }
+          }
+        },
+        sort: {
+          id: {
+            order: "asc"
           }
         }
       }
     });
+    const count = body.hits.total["value"];
     const hits = body.hits.hits;
-    return hits.map((item) => item._source);
+    const results = hits.map((item) => item._source);
+    return {
+      count: startId ? separateCount : count,
+      results
+    };
+  }
+
+  async count(query: string, fields: string[]) {
+    const { body } = await this.elasticSearchService.count<PostCountResult>({
+      index: this.index,
+      body: {
+        query: {
+          multi_match: {
+            query,
+            fields
+          }
+        }
+      }
+    });
+    return body.count;
   }
 
   async remove(postId: number) {

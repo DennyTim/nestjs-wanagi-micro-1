@@ -15,6 +15,7 @@ import { JwtAuthenticationGuard } from "../../auth/guards/jwt-authentication.gua
 import { RequestWithUser } from "../../auth/models/requestWithUser.interface";
 import { ExceptionsLoggerFilter } from "../../utils/exceptions-logger.filter";
 import { FindOneParams } from "../../utils/findOne-param";
+import { PaginationParams } from "../../utils/types/pagination-params.dto";
 import { CreatePostDto } from "../dto/createPost.dto";
 import { UpdatePostDto } from "../dto/updatePost.dto";
 import PostsService from "../services/posts.service";
@@ -25,11 +26,14 @@ export default class PostsController {
   }
 
   @Get()
-  async getPosts(@Query("search") search: string) {
+  async getPosts(
+    @Query("search") search: string,
+    @Query() { offset, limit, startId }: PaginationParams
+  ) {
     if (search) {
-      return this.postsService.searchForPosts(search);
+      return this.postsService.searchForPosts(search, offset, limit, startId);
     }
-    return this.postsService.getAllPosts();
+    return this.postsService.getAllPosts(offset, limit, startId);
   }
 
   @Get(":id")
