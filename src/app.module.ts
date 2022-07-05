@@ -6,6 +6,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthenticationModule } from "./auth/authentication.module";
 import { CategoriesModule } from "./categories/category.module";
+import { CommentsModule } from "./comments/comments.module";
 import { DatabaseModule } from "./database/database.module";
 import { PostsModule } from "./posts/posts.module";
 import { SubscribersModule } from "./subscribers/subscribers.module";
@@ -18,6 +19,7 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
     AuthenticationModule,
     CategoriesModule,
     SubscribersModule,
+    CommentsModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),
@@ -29,7 +31,7 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
         JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
         JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
-        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required()
       })
     })
   ],
