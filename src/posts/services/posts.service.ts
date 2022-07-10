@@ -1,5 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import {
+  CACHE_MANAGER,
+  Inject,
+  Injectable
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Cache } from "cache-manager";
 import PostEntity from "src/posts/entities/post.entity";
 import {
   FindManyOptions,
@@ -8,6 +13,7 @@ import {
   Repository
 } from "typeorm";
 import { UserEntity } from "../../users/user.entity";
+import { GET_POSTS_CACHE_KEY } from "../constants/posts-cache-key.constant";
 import { CreatePostDto } from "../dto/createPost.dto";
 import { UpdatePostDto } from "../dto/updatePost.dto";
 import { PostNotFoundException } from "../exceptions/post-not-found.exception";
@@ -19,12 +25,22 @@ export default class PostsService {
   constructor(
     @InjectRepository(PostEntity)
     private postsRepository: Repository<PostEntity>,
-    private postsSearchService: PostsSearchService
+    private postsSearchService: PostsSearchService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {
   }
 
+  async clearCache() {
+    const keys: string[] = await this.cacheManager.store.keys();
+    keys.forEach((key) => {
+      if (key.startsWith(GET_POSTS_CACHE_KEY)) {
+        this.cacheManager.del(key);
+      }
+    });
+  }
+
   async getAllPosts(offset?: number, limit?: number, startId?: number) {
-    const where: FindManyOptions<Post>['where'] = {};
+    const where: FindManyOptions<Post>["where"] = {};
     let separateCount = 0;
     if (startId) {
       where.id = MoreThan(startId);
@@ -34,7 +50,7 @@ export default class PostsService {
       where,
       relations: ["author"],
       order: {
-        id: 'ASC'
+        id: "ASC"
       },
       skip: offset,
       take: limit
@@ -43,7 +59,7 @@ export default class PostsService {
     return {
       items,
       count: startId ? separateCount : count
-    }
+    };
   }
 
   async getPostById(id: number) {
@@ -66,6 +82,7 @@ export default class PostsService {
     const updatedPost = await this.postsRepository.findOne({ where: { id }, relations: ["author"] });
     if (updatedPost) {
       await this.postsSearchService.update(updatedPost);
+      await this.clearCache();
       return updatedPost;
     }
     throw new PostNotFoundException(id);
@@ -81,6 +98,7 @@ export default class PostsService {
     });
     const savedPost = await this.postsRepository.save(newPost);
     this.postsSearchService.indexPost(savedPost);
+    await this.clearCache();
     return savedPost;
   }
 
@@ -90,11 +108,12 @@ export default class PostsService {
       throw new PostNotFoundException(id);
     }
     await this.postsSearchService.remove(id);
+    await this.clearCache();
   }
 
   async searchForPosts(
     text: string,
-    offset?:number,
+    offset?: number,
     limit?: number,
     startId?: number
   ) {
@@ -115,6 +134,6 @@ export default class PostsService {
     return {
       items,
       count
-    }
+    };
   }
 }
