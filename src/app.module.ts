@@ -9,6 +9,8 @@ import { CategoriesModule } from "./categories/category.module";
 import { CommentsModule } from "./comments/comments.module";
 import { DatabaseModule } from "./database/database.module";
 import { PostsModule } from "./posts/posts.module";
+import { ProductCategoriesModule } from "./product-categories/product-category.module";
+import { ProductsModule } from "./products/products.module";
 import { SubscribersModule } from "./subscribers/subscribers.module";
 import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
 
@@ -20,6 +22,8 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
     CategoriesModule,
     SubscribersModule,
     CommentsModule,
+    ProductsModule,
+    ProductCategoriesModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),
