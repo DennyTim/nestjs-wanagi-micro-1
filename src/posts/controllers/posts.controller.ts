@@ -2,6 +2,7 @@ import {
   Body,
   CacheKey,
   CacheTTL,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -26,6 +27,7 @@ import { HttpCacheInterceptor } from "../interceptors/http-cache.interceptor";
 import PostsService from "../services/posts.service";
 
 @Controller("posts")
+@UseInterceptors(ClassSerializerInterceptor)
 export default class PostsController {
   constructor(private readonly postsService: PostsService) {
   }

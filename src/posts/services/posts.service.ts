@@ -30,13 +30,18 @@ export default class PostsService {
   ) {
   }
 
-  async clearCache() {
-    const keys: string[] = await this.cacheManager.store.keys();
-    keys.forEach((key) => {
+  async clearCache(): Promise<boolean> {
+    if (!this.cacheManager.store.keys) {
+      return false;
+    }
+
+    for (const key of await this.cacheManager.store.keys()) {
       if (key.startsWith(GET_POSTS_CACHE_KEY)) {
-        this.cacheManager.del(key);
+        await this.cacheManager.del(key);
       }
-    });
+    }
+
+    return true;
   }
 
   async getAllPosts(offset?: number, limit?: number, startId?: number) {
