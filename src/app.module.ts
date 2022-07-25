@@ -8,6 +8,7 @@ import { AuthenticationModule } from "./auth/authentication.module";
 import { CategoriesModule } from "./categories/category.module";
 import { CommentsModule } from "./comments/comments.module";
 import { DatabaseModule } from "./database/database.module";
+import { EmailModule } from "./email/email.module";
 import { PostsModule } from "./posts/posts.module";
 import { ProductCategoriesModule } from "./product-categories/product-category.module";
 import { ProductsModule } from "./products/products.module";
@@ -24,8 +25,12 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
     CommentsModule,
     ProductsModule,
     ProductCategoriesModule,
+    EmailModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
+        EMAIL_SERVICE: Joi.string().required(),
+        EMAIL_USER: Joi.string().required(),
+        EMAIL_PASSWORD: Joi.string().required(),
         JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
         JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
