@@ -33,9 +33,11 @@
     "@nestjs/microservices": "^8.4.7",
     "@nestjs/passport": "^8.2.2",
     "@nestjs/platform-express": "^8.1.1",
+    "@nestjs/schedule": "^2.1.0",
     "@nestjs/typeorm": "^8.1.4",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.3",
+    "@types/cron": "^2.0.0",
     "@types/hapi__joi": "^17.1.8",
     "@types/nodemailer": "^6.4.4",
     "@types/passport-jwt": "^3.0.6",
@@ -52,10 +54,10 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.3",
+    "redis": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.4.0",
-    "redis": "^3.1.1",
     "typeorm": "^0.3.6"
   },
   "devDependencies": {

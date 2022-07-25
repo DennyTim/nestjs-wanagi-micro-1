@@ -2,12 +2,14 @@ import * as Joi from "@hapi/joi";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { APP_FILTER } from "@nestjs/core";
+import { ScheduleModule } from "@nestjs/schedule";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthenticationModule } from "./auth/authentication.module";
 import { CategoriesModule } from "./categories/category.module";
 import { CommentsModule } from "./comments/comments.module";
 import { DatabaseModule } from "./database/database.module";
+import { EmailSchedulerModule } from "./email-scheduler/email-scheduler.module";
 import { EmailModule } from "./email/email.module";
 import { PostsModule } from "./posts/posts.module";
 import { ProductCategoriesModule } from "./product-categories/product-category.module";
@@ -26,6 +28,8 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
     ProductsModule,
     ProductCategoriesModule,
     EmailModule,
+    EmailSchedulerModule,
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         EMAIL_SERVICE: Joi.string().required(),
