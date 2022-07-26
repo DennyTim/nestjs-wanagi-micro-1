@@ -7,6 +7,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthenticationModule } from "./auth/authentication.module";
 import { CategoriesModule } from "./categories/category.module";
+import { ChatModule } from "./chat/chat.module";
 import { CommentsModule } from "./comments/comments.module";
 import { DatabaseModule } from "./database/database.module";
 import { EmailSchedulerModule } from "./email-scheduler/email-scheduler.module";
@@ -29,6 +30,7 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
     ProductCategoriesModule,
     EmailModule,
     EmailSchedulerModule,
+    ChatModule,
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
