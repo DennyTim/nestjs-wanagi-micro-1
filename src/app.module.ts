@@ -1,13 +1,17 @@
 import * as Joi from "@hapi/joi";
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import {
+  ConfigModule,
+  ConfigService
+} from "@nestjs/config";
 import { APP_FILTER } from "@nestjs/core";
+import { GraphQLModule } from "@nestjs/graphql";
 import { ScheduleModule } from "@nestjs/schedule";
+import { join } from "path";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthenticationModule } from "./auth/authentication.module";
 import { CategoriesModule } from "./categories/category.module";
-import { ChatModule } from "./chat/chat.module";
 import { CommentsModule } from "./comments/comments.module";
 import { DatabaseModule } from "./database/database.module";
 import { EmailSchedulerModule } from "./email-scheduler/email-scheduler.module";
@@ -30,8 +34,15 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
     ProductCategoriesModule,
     EmailModule,
     EmailSchedulerModule,
-    ChatModule,
     ScheduleModule.forRoot(),
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        playground: Boolean(configService.get("GRAPHQL_PLAYGROUND")),
+        autoSchemaFile: join(process.cwd(), "src/schema.gql")
+      })
+    }),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         EMAIL_SERVICE: Joi.string().required(),
@@ -48,7 +59,8 @@ import { ExceptionsLoggerFilter } from "./utils/exceptions-logger.filter";
         POSTGRES_DB: Joi.string().required(),
         PORT: Joi.number(),
         REDIS_HOST: Joi.string().required(),
-        REDIS_PORT: Joi.number().required()
+        REDIS_PORT: Joi.number().required(),
+        GRAPHQL_PLAYGROUND: Joi.number()
       })
     })
   ],
